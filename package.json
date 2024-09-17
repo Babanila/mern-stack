@@ -6,9 +6,11 @@
   "scripts": {
     "start": "tsc && node dist/server.js",
     "server": "nodemon --watch 'backend/**' --ext 'ts,json' --exec 'ts-node backend/server.ts'",
-    "lint": "eslint .",
-    "check": "prettier --check .",
-    "format": "prettier --write .",
+    "lint": "npm run eslint:lint && npm run prettier:check",
+    "format": "npm run prettier:format",
+    "eslint:lint": "eslint .",
+    "prettier:check": "prettier --check .",
+    "prettier:format": "prettier --write .",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky"
