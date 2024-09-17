@@ -11,8 +11,9 @@ const getGoals = (req: Request, res: Response) => {
 // @route   POST    /api/goals
 // @access  Private
 const setGoal = (req: Request, res: Response) => {
-  if (!req.body) {
-    res.status(400).json({ message: "Please add a payload" });
+  if (!req.body.text) {
+    res.status(400);
+    throw new Error("Please add a payload");
   }
 
   res.status(201).json({ message: "Set goal" });
