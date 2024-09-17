@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
+import { errorHandler } from "./middlewares/errorMiddleware";
 dotenv.config();
 
 const app = express();
@@ -15,6 +16,8 @@ app.use("/api/goals", require("./routes/goalRoutes"));
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello, TypeScript + Node.js + Express!");
 });
+
+app.use(errorHandler);
 
 // Start the server and listen on the specified port
 app.listen(port, () => {
