@@ -1,7 +1,16 @@
 import express, { Request, Response } from "express";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
-const port: number = 3000;
+
+// Add middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+const port: number = Number(process.env.PORT) || 8000;
+
+app.use("/api/goals", require("./routes/goalRoutes"));
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello, TypeScript + Node.js + Express!");
