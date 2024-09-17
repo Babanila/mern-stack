@@ -1,10 +1,10 @@
 import express from 'express';
 import {
-  getGoals,
-  setGoal,
-  updateGoal,
-  deleteGoal,
-} from '../controllers/goalControllers';
+    getGoals,
+    setGoal,
+    updateGoal,
+    deleteGoal,
+} from '../controllers/goalController';
 
 const router = express.Router();
 
