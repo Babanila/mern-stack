@@ -38,6 +38,7 @@
     "mongoose": "^8.6.2"
   },
   "lint-staged": {
+    "**/*.ts": "eslint .",
     "**/*": "prettier --write --ignore-unknown"
   }
 }
