@@ -1,17 +1,17 @@
-import express from "express";
+import express from 'express';
 import {
   getGoals,
   setGoal,
   updateGoal,
   deleteGoal,
-} from "../controllers/goalControllers";
+} from '../controllers/goalControllers';
 
 const router = express.Router();
 
-router.get("/", getGoals);
-router.post("/", setGoal);
-router.put("/:id", updateGoal);
-router.delete("/:id", deleteGoal);
+router.get('/', getGoals);
+router.post('/', setGoal);
+router.put('/:id', updateGoal);
+router.delete('/:id', deleteGoal);
 
 /*
 // Alternative to the above

@@ -1,11 +1,11 @@
-import { Request, Response } from "express";
-import asyncHandler from "express-async-handler";
+import { Request, Response } from 'express';
+import asyncHandler from 'express-async-handler';
 
 // @desc    Get goal
 // @route   GET    /api/goals
 // @access  Private
 const getGoals = asyncHandler(async (req: Request, res: Response) => {
-  res.status(200).json({ message: "Get goal" });
+  res.status(200).json({ message: 'Get goal' });
 });
 
 // @desc    Set goal
@@ -14,10 +14,10 @@ const getGoals = asyncHandler(async (req: Request, res: Response) => {
 const setGoal = asyncHandler(async (req: Request, res: Response) => {
   if (!req.body.text) {
     res.status(400);
-    throw new Error("Please add a payload");
+    throw new Error('Please add a payload');
   }
 
-  res.status(201).json({ message: "Set goal" });
+  res.status(201).json({ message: 'Set goal' });
 });
 
 // @desc    Update goal
