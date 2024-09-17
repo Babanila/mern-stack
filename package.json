@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "tsc && node dist/server.js",
-    "dev": "nodemon --watch 'backend/**' --ext 'ts,json' --exec 'ts-node backend/server.ts'",
+    "server": "nodemon --watch 'backend/**' --ext 'ts,json' --exec 'ts-node backend/server.ts'",
     "lint": "eslint .",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -25,6 +25,9 @@
     "typescript-eslint": "^8.6.0"
   },
   "dependencies": {
-    "express": "^4.21.0"
+    "colors": "^1.4.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "mongoose": "^8.6.2"
   }
 }
