@@ -19,4 +19,4 @@ router.route('/').get(getGoals).post(setGoal);
 router.route('/:id').put(updateGoal).delete(deleteGoal);
 */
 
-module.exports = router;
+export const goalRoutes = router;

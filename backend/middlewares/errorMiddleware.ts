@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 const errorHandler = (
   err: { message: any; stack: any },
   req: any,

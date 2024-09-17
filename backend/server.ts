@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import { errorHandler } from './middlewares/errorMiddleware';
+import { goalRoutes } from './routes/goalRoutes';
 dotenv.config();
 
 const app = express();
@@ -11,7 +12,7 @@ app.use(express.urlencoded({ extended: false }));
 
 const port: number = Number(process.env.PORT) || 8000;
 
-app.use('/api/goals', require('./routes/goalRoutes'));
+app.use('/api/goals', goalRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello, TypeScript + Node.js + Express!');
