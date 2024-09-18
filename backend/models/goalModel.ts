@@ -1,6 +1,14 @@
-import mongoose, { Schema } from 'mongoose';
+import { model, Document, Model, Schema } from 'mongoose';
 
-const GoalSchema = new Schema(
+interface GoalInterface extends Document {
+    text: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
+type GoalModel = Model<GoalInterface>;
+
+const goalSchema: Schema = new Schema<GoalInterface, GoalModel>(
     {
         text: {
             type: String,
@@ -12,4 +20,4 @@ const GoalSchema = new Schema(
     },
 );
 
-export const Goal = mongoose.model('Goal', GoalSchema);
+export const Goal = model<GoalInterface, GoalModel>('Goal', goalSchema);
