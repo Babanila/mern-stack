@@ -1,33 +1,23 @@
-import { MongoClient, ServerApiVersion } from 'mongodb';
+import mongoose from 'mongoose';
 import * as dotenv from 'dotenv';
 import colors from 'colors';
 
 dotenv.config();
 const uri: string = process.env.MONGO_URI ?? '';
+const dbName: string = process.env.DB_NAME ?? '';
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
-    serverApi: {
-        version: ServerApiVersion.v1,
-        strict: true,
-        deprecationErrors: true,
-    },
-});
-
-async function connectToDatabase() {
+const connectToDatabase = async () => {
     try {
-        await client.connect();
+        const connectionInstance = await mongoose.connect(`${uri}/${dbName}`);
 
         console.log(
-            colors.blue.underline('You successfully connected to MongoDB!!!'),
+            `MongoDB Connected Successfully!!! DB Host: ${connectionInstance.connection.host}`
+                .bgMagenta,
         );
     } catch (error) {
-        console.log('MongoDB Error', error);
-        await client.close();
+        console.log(colors.bgRed('MONGODB Connection Failed'), error);
         process.exit(1);
-    } finally {
-        await client.close();
     }
-}
+};
 
 export { connectToDatabase };
