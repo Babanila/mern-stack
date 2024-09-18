@@ -13,4 +13,4 @@ router.post('/', createUser);
 router.put('/:id', updateUser);
 router.delete('/:id', deleteUser);
 
-export { router as userRoute };
+export { router as userRoutes };
