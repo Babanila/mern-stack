@@ -3,12 +3,12 @@ import * as dotenv from 'dotenv';
 import colors from 'colors';
 
 dotenv.config();
-const uri: string = process.env.MONGO_URI ?? '';
-const dbName: string = process.env.DB_NAME ?? '';
 
 const connectToDatabase = async () => {
     try {
-        const connectionInstance = await mongoose.connect(`${uri}/${dbName}`);
+        const connectionInstance = await mongoose.connect(
+            `${process.env.MONGO_URI}/${process.env.DB_NAME}`,
+        );
 
         console.log(
             `MongoDB Connected Successfully!!! DB Host: ${connectionInstance.connection.host}`
