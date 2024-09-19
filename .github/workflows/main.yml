@@ -20,19 +20,17 @@ jobs:
 
             - name: Install Dependencies
               run: |
-                  cd mern-stack
                   npm install
 
             - name: Build Project
               run: |
-                  cd mern-stack
                   npm run build
 
             - name: Upload artifact to enable deployment
               uses: actions/upload-artifact@v3
               with:
                   name: poduction file
-                  path: ./mern-stack/build
+                  path: ./build
 
     # Deploy Job
     deploy:
@@ -44,10 +42,10 @@ jobs:
               uses: actions/download-artifact@v3
               with:
                   name: poduction file
-                  path: ./mern-stack/build
+                  path: ./build
 
             - name: Deploy to GitHub Pages
               uses: peaceiris/actions-gh-pages@v3
               with:
                   github_token: ${{ secrets.ALL_REPO_TOKEN_PERSONAL }}
-                  publish_dir: ./mern-stack/build
+                  publish_dir: ./build
