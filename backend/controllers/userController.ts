@@ -82,16 +82,18 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
 // @access  Private
 const getLoggedInUser = asyncHandler(
     async (req: RequestExtended, res: Response) => {
-        const result = (await User.findById(req?.user?._id)) as UserInterface;
+        const { _id, name, email } = (await User.findById(
+            req?.user?._id,
+        )) as UserInterface;
 
-        if (!result._id || !result.name || !result.email) {
+        if (!_id || !name || !email) {
             res.status(400);
-            throw new Error('Missing user details in header');
+            throw new Error('Missing user details');
         } else {
             res.status(200).json({
-                id: result._id,
-                name: result.name,
-                email: result.email,
+                id: _id,
+                name: name,
+                email: email,
             });
         }
     },
