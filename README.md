@@ -1,6 +1,6 @@
-# MERN-APP
+# MERN-STACK-APP
 
-# Goalsetter MERN app
+# Mern Stack app
 
 This is the goalsetter app from the [MERN Stack Web App](https://github.com/Babanila/mern-stack).
 
