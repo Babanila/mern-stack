@@ -4,7 +4,7 @@ import tseslint from 'typescript-eslint';
 
 export default [
     {
-        ignores: ['dist'],
+        ignores: ['dist', 'build'],
     },
     {
         files: ['**/*.{js,mjs,cjs,ts}'],

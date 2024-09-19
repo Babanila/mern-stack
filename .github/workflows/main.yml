@@ -1,9 +1,6 @@
 name: CI/CD for mern-stack
 
-on:
-    push:
-        branches:
-            - main
+on: [push]
 
 jobs:
     # Build Job
@@ -11,28 +8,26 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout Code
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
 
             - name: Install Node
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v4
               with:
-                  node-version: 20.x
+                  node-version: '20'
 
             - name: Install Dependencies
               run: |
-                  cd mern-stack
                   npm install
 
             - name: Build Project
               run: |
-                  cd mern-stack
                   npm run build
 
             - name: Upload artifact to enable deployment
               uses: actions/upload-artifact@v3
               with:
                   name: poduction file
-                  path: ./mern-stack/build
+                  path: ./dist
 
     # Deploy Job
     deploy:
@@ -44,10 +39,10 @@ jobs:
               uses: actions/download-artifact@v3
               with:
                   name: poduction file
-                  path: ./mern-stack/build
+                  path: ./dist
 
             - name: Deploy to GitHub Pages
-              uses: peaceiris/actions-gh-pages@v3
+              uses: peaceiris/actions-gh-pages@v4
               with:
-                  github_token: ${{ secrets.ALL_REPO_TOKEN_PERSONAL }}
-                  publish_dir: ./mern-stack/build
+                  github_token: ${{ secrets.PERSONAL_TOKEN }}
+                  publish_dir: ./dist
