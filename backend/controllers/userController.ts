@@ -2,7 +2,8 @@ import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { User } from '../models/userModel';
+import { User, UserInterface } from '../models/userModel';
+import { RequestExtended } from '../middlewares/authMiddleware';
 
 // @desc    Get users
 // @route   GET    /api/users
@@ -79,9 +80,22 @@ const loginUser = asyncHandler(async (req: Request, res: Response) => {
 // @desc    Get  user data
 // @route   GET    /api/users/me
 // @access  Private
-const getMe = asyncHandler(async (req: Request, res: Response) => {
-    res.status(201).json({ message: 'User data details' });
-});
+const getLoggedInUser = asyncHandler(
+    async (req: RequestExtended, res: Response) => {
+        const result = (await User.findById(req?.user?._id)) as UserInterface;
+
+        if (!result._id || !result.name || !result.email) {
+            res.status(400);
+            throw new Error('Missing user details in header');
+        } else {
+            res.status(200).json({
+                id: result._id,
+                name: result.name,
+                email: result.email,
+            });
+        }
+    },
+);
 
 // @desc    Update  user
 // @route   PUT    /api/users/:id
@@ -118,4 +132,11 @@ const generateToken = (id: string) => {
     return jwt.sign({ id }, `${process.env.JWT_SECRET}`, { expiresIn: '5h' });
 };
 
-export { getMe, getUsers, registerUser, loginUser, updateUser, deleteUser };
+export {
+    getUsers,
+    registerUser,
+    loginUser,
+    updateUser,
+    deleteUser,
+    getLoggedInUser,
+};
