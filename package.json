@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "description": "",
     "main": "dist/index.js",
+    "homepage": "https://github.com/Babanila/mern-stack",
     "scripts": {
         "start": "tsc && node dist/server.js",
         "server": "nodemon --watch 'backend/**' --ext 'ts,json' --exec 'ts-node backend/server.ts'",
