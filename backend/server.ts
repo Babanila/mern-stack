@@ -3,6 +3,7 @@ import colors from 'colors';
 import dotenv from 'dotenv';
 import { errorHandler } from './middlewares/errorMiddleware';
 import { goalRoutes } from './routes/goalRoutes';
+import { userRoutes } from './routes/userRoutes';
 import { connectToDatabase } from './config/db';
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(express.urlencoded({ extended: false }));
 const port: number = Number(process.env.PORT) || 8000;
 
 app.use('/api/goals', goalRoutes);
+app.use('/api/users', userRoutes);
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Hello, TypeScript + Node.js + Express!');
