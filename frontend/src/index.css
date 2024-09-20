@@ -37,7 +37,7 @@ h3 {
 
 .container {
     width: 100%;
-    max-width: 960px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
     text-align: center;
@@ -59,12 +59,13 @@ h3 {
 }
 
 .header ul li {
-    margin-left: 20px;
+    display: flex;
 }
 
 .header ul li a {
     display: flex;
     align-items: center;
+    margin-left: 20px;
 }
 
 .header ul li a:hover {
