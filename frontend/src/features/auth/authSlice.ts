@@ -9,15 +9,16 @@ interface IState {
     message: string;
 }
 
-type ErrorResponse = {
-    response?: {
-        data?: {
-            message?: string;
-        };
-    };
-    message?: string;
-    toString: () => string;
-};
+type ErrorResponse =
+    | {
+          response?: {
+              data?: {
+                  message?: string;
+              };
+          };
+          message?: string;
+      }
+    | string;
 
 // Get user from local storage
 const localUser: string | null = localStorage.getItem('user');
@@ -37,13 +38,11 @@ export const register = createAsyncThunk(
     async (user, thunkAPI) => {
         try {
             return await authService.register(user);
-        } catch (err: unknown) {
-            const error = err as ErrorResponse;
-
+        } catch (error: ErrorResponse) {
             const message: string =
                 error?.response?.data?.message ||
                 error?.message ||
-                error.toString();
+                error?.toString();
 
             return thunkAPI.rejectWithValue(message);
         }
@@ -59,7 +58,7 @@ export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
         const message: string =
             error?.response?.data?.message ||
             error?.message ||
-            error.toString();
+            error?.toString();
 
         return thunkAPI.rejectWithValue(message);
     }
