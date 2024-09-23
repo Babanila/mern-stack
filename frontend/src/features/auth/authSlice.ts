@@ -1,31 +1,42 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import authService from './authService';
+import authService, {
+    IUserRegistrationData,
+    IUserLoginData,
+} from './authService';
 
-interface IState {
-    user: string | null;
+export interface IUserResponse {
+    id: string;
+    name: string;
+    email: string;
+    token: string;
+}
+
+export interface IState {
+    user: IUserResponse | null;
     isError: boolean;
     isSuccess: boolean;
     isLoading: boolean;
     message: string;
 }
 
-type ErrorResponse =
+export type ErrorResponse =
     | {
           response?: {
               data?: {
                   message?: string;
               };
           };
-          message?: string;
       }
-    | string;
+    | { message: string }
+    | string
+    | unknown;
 
 // Get user from local storage
 const localUser: string | null = localStorage.getItem('user');
-const user = localUser ? JSON.parse(localUser) : '';
+const user: IUserResponse = localUser ? JSON.parse(localUser) : null;
 
 const initialState: IState = {
-    user: user ? user : null,
+    user: user,
     isError: false,
     isSuccess: false,
     isLoading: false,
@@ -33,34 +44,42 @@ const initialState: IState = {
 };
 
 // Register User
-export const register = createAsyncThunk(
-    'auth/register',
-    async (user, thunkAPI) => {
-        try {
-            return await authService.register(user);
-        } catch (error: ErrorResponse) {
+export const register = createAsyncThunk<
+    IUserResponse,
+    IUserRegistrationData,
+    {
+        rejectValue: ErrorResponse;
+    }
+>('auth/register', async (user, thunkAPI) => {
+    try {
+        return await authService.register(user);
+    } catch (error) {
+        console.log('error', error);
+        return thunkAPI.rejectWithValue(error) as ErrorResponse;
+    }
+});
+
+// Login User
+export const login = createAsyncThunk<
+    IUserResponse,
+    IUserLoginData,
+    {
+        rejectValue: ErrorResponse;
+    }
+>('auth/login', async (user: IUserLoginData, thunkAPI) => {
+    try {
+        return await authService.login(user);
+    } catch (error) {
+        /*
+            const error = err as ErrorResponse;
             const message: string =
                 error?.response?.data?.message ||
                 error?.message ||
                 error?.toString();
+        */
 
-            return thunkAPI.rejectWithValue(message);
-        }
-    },
-);
-
-export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
-    try {
-        return await authService.login(user);
-    } catch (err: unknown) {
-        const error = err as ErrorResponse;
-
-        const message: string =
-            error?.response?.data?.message ||
-            error?.message ||
-            error?.toString();
-
-        return thunkAPI.rejectWithValue(message);
+        console.log('error', error);
+        return thunkAPI.rejectWithValue(error) as ErrorResponse;
     }
 });
 
@@ -87,16 +106,17 @@ export const authSlice = createSlice({
             .addCase(register.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.isSuccess = true;
-                state.user = action.payload;
+                state.user = action.payload as IUserResponse;
             })
             .addCase(register.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
-                state.message = action.payload;
+                state.message = action.payload as string;
                 state.user = null;
             });
     },
 });
 
+export type { IUserRegistrationData, IUserLoginData };
 export const { reset } = authSlice.actions;
 export default authSlice.reducer;
