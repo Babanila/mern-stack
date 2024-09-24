@@ -1,5 +1,14 @@
 import { useEffect, useState, FormEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { FaUser } from 'react-icons/fa';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import Spinner from '../components/Spinner';
+import {
+    register,
+    reset,
+    IUserRegistrationData,
+} from '../features/auth/authSlice';
 
 interface FormElements extends HTMLFormControlsCollection {
     name: HTMLInputElement;
@@ -28,6 +37,25 @@ function Register() {
 
     const { name, email, password, confirmPassword } = formData;
 
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+
+    const { user, isLoading, isError, isSuccess, message } = useAppSelector(
+        (state) => state.auth,
+    );
+
+    useEffect(() => {
+        if (isError) {
+            toast.error(message);
+        }
+
+        if (isSuccess || user) {
+            navigate('/');
+        }
+
+        dispatch(reset());
+    }, [user, isError, isSuccess, message, navigate, dispatch]);
+
     const onChange = (e: { target: { name: string; value: string } }) => {
         setFormData((prevState) => ({
             ...prevState,
@@ -37,7 +65,18 @@ function Register() {
 
     const onSubmit = (e: FormEvent<RegistrationFormElement>) => {
         e.preventDefault();
+
+        if (password !== confirmPassword) {
+            toast.error('Passwords do not match');
+        } else {
+            const userData: IUserRegistrationData = { name, email, password };
+            dispatch(register(userData));
+        }
     };
+
+    if (isLoading) {
+        return <Spinner />;
+    }
 
     return (
         <>
