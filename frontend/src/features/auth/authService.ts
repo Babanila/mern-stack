@@ -19,11 +19,16 @@ export type IUserLoginData = Omit<IUserRegistrationData, 'name'>;
 const register = async (userData: IUserRegistrationData) => {
     try {
         const response = await axios.post(API_URL, userData);
-        if (response.data) {
-            localStorage.setItem('user', JSON.stringify(response.data));
-        }
 
-        return response.data;
+        if (typeof response.data === 'string') {
+            return {
+                message: 'Something went wrong',
+                stack: `${response.data}`,
+            };
+        } else {
+            localStorage.setItem('user', JSON.stringify(response.data));
+            return response.data;
+        }
     } catch (error) {
         if (isAxiosError(error) && error.response) {
             return error?.response?.data as IUserErrorResponse;
@@ -63,5 +68,4 @@ const authService = {
     logout,
 };
 
-export { isAxiosError };
 export default authService;

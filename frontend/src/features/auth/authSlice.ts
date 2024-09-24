@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import authService, {
     IUserRegistrationData,
     IUserLoginData,
-    isAxiosError,
     IUserErrorResponse,
 } from './authService';
 
@@ -19,11 +18,6 @@ export interface IState {
     isSuccess: boolean;
     isLoading: boolean;
     message: string;
-}
-
-interface ValidationError {
-    message: string;
-    errors: Record<string, string[]>;
 }
 
 // Get user from local storage
@@ -46,18 +40,16 @@ export const register = createAsyncThunk<
         rejectValue: string;
     }
 >('auth/register', async (user, thunkAPI) => {
-    try {
-        return await authService.register(user);
-    } catch (error) {
-        console.error('error', error);
+    const response = await authService.register(user);
 
-        let message = '';
-        if (isAxiosError<ValidationError, Record<string, unknown>>(error)) {
-            message = error?.message;
-        } else {
-            message = error as string;
-        }
-        return thunkAPI.rejectWithValue(message);
+    if (typeof response === 'string') {
+        return thunkAPI.rejectWithValue(
+            'Something went wrong, please try again later.',
+        );
+    } else if (response.message) {
+        return thunkAPI.rejectWithValue(response.message);
+    } else {
+        return response;
     }
 });
 
@@ -69,15 +61,12 @@ export const login = createAsyncThunk<
         rejectValue: IUserErrorResponse;
     }
 >('auth/login', async (user: IUserLoginData, thunkAPI) => {
-    try {
-        return await authService.login(user);
-    } catch (error) {
-        console.error('error', error);
-        const err = error as IUserErrorResponse;
-        const message = err.message as string;
-        console.error('error message', message);
+    const response = await authService.login(user);
 
-        return thunkAPI.rejectWithValue(err);
+    if (response.message) {
+        return thunkAPI.rejectWithValue(response.message);
+    } else {
+        return response;
     }
 });
 

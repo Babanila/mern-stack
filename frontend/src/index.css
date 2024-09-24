@@ -87,6 +87,17 @@ h3 {
     color: #828282;
 }
 
+.page-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.page-title svg {
+    margin-bottom: 10px;
+}
+
 .goals {
     display: grid;
     grid-template-columns: repeat(2, 1fr);

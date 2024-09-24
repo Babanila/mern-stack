@@ -69,9 +69,10 @@ function Login() {
     return (
         <>
             <section className='heading'>
-                <h1>
-                    <FaSignInAlt /> Login
-                </h1>
+                <div className='page-title'>
+                    <FaSignInAlt />
+                    <h1>Login</h1>
+                </div>
                 <p>Login and start setting goals</p>
             </section>
 
