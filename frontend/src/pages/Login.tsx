@@ -1,5 +1,10 @@
 import { useEffect, useState, FormEvent } from 'react';
 import { FaSignInAlt } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import Spinner from '../components/Spinner';
+import { login, reset, IUserLoginData } from '../features/auth/authSlice';
 
 interface FormElements extends HTMLFormControlsCollection {
     email: HTMLInputElement;
@@ -21,6 +26,24 @@ function Login() {
     });
 
     const { email, password } = formData;
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+
+    const { user, isLoading, isError, isSuccess, message } = useAppSelector(
+        (state) => state.auth,
+    );
+
+    useEffect(() => {
+        if (isError) {
+            toast.error(message);
+        }
+
+        if (isSuccess || user) {
+            navigate('/');
+        }
+
+        dispatch(reset());
+    }, [user, isError, isSuccess, message, navigate, dispatch]);
 
     const onChange = (e: { target: { name: string; value: string } }) => {
         setFormData((prevState) => ({
@@ -31,7 +54,17 @@ function Login() {
 
     const onSubmit = (e: FormEvent<LoginFormElement>) => {
         e.preventDefault();
+        if (!password || !email) {
+            toast.error('Please fill all fields');
+        } else {
+            const userData: IUserLoginData = { email, password };
+            dispatch(login(userData));
+        }
     };
+
+    if (isLoading) {
+        return <Spinner />;
+    }
 
     return (
         <>
