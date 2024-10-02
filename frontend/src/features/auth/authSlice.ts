@@ -25,7 +25,7 @@ const localUser: string | null = localStorage.getItem('user');
 const user: IUserResponse = localUser ? JSON.parse(localUser) : null;
 
 const initialState: IState = {
-    user: user,
+    user: user ? user : null,
     isError: false,
     isSuccess: false,
     isLoading: false,
