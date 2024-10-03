@@ -1,3 +1,4 @@
+import path from 'path';
 import express, { Request, Response } from 'express';
 import colors from 'colors';
 import dotenv from 'dotenv';
@@ -19,9 +20,19 @@ const port: number = Number(process.env.PORT) || 8000;
 app.use('/api/goals', goalRoutes);
 app.use('/api/users', userRoutes);
 
-app.get('/', (req: Request, res: Response) => {
-    res.send('Hello, TypeScript + Node.js + Express!');
-});
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, '../frontend/build')));
+
+    app.get('*', (req, res) =>
+        res.sendFile(
+            path.resolve(__dirname, '../', 'frontend', 'build', 'index.html'),
+        ),
+    );
+} else {
+    app.get('/', (req: Request, res: Response) => {
+        res.send("Please set environment to production, or run 'npm run dev'");
+    });
+}
 
 app.use(errorHandler);
 
