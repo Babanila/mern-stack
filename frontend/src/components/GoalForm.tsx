@@ -29,6 +29,7 @@ function GoalForm() {
                         type='text'
                         name='text'
                         id='text'
+                        placeholder='Type Goal here'
                         value={text}
                         onChange={(e) => setText(e.target.value)}
                     />

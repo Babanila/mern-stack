@@ -39,17 +39,27 @@ h3 {
     width: 100%;
     max-width: 960px;
     margin: 0 auto;
-    padding: 0 20px;
     text-align: center;
 }
 
 .header {
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 0;
+    padding: 15px 20px;
+    background-color: #fff;
     border-bottom: 1px solid #e6e6e6;
-    margin-bottom: 60px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 5000;
+}
+
+.logo {
+    font-size: 32px;
+    font-weight: 900;
 }
 
 .header ul {
@@ -94,6 +104,10 @@ h3 {
     gap: 5px;
 }
 
+section {
+    margin-top: 90px;
+}
+
 .page-title svg {
     margin-bottom: 10px;
 }
@@ -107,7 +121,7 @@ h3 {
 .goal {
     background-color: #f4f4f4;
     margin: 10px 0;
-    padding: 20px 0 10px;
+    padding: 20px 10px;
     position: relative;
 }
 
@@ -121,13 +135,26 @@ h3 {
 }
 
 .form,
+.title,
 .content {
     width: 70%;
     margin: 0 auto;
 }
 
+.title {
+    display: flex;
+    justify-content: left;
+    text-align: center;
+    font-size: 32px;
+    margin-top: 2rem;
+}
+
 .form-group {
     margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .form-group input,
@@ -143,6 +170,8 @@ h3 {
 }
 
 .form-group label {
+    width: 100%;
+    max-width: 350px;
     text-align: left;
     display: block;
     margin: 0 0 5px 3px;
@@ -241,6 +270,15 @@ h3 {
 }
 
 @media (max-width: 600px) {
+    .goals {
+        display: grid;
+        gap: 10px;
+    }
+
+    .goal {
+        padding: 20px;
+    }
+
     .form {
         width: 90%;
     }
