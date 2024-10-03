@@ -31,60 +31,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const axios_1 = __importStar(require("axios"));
-const API_URL = '/api/users/';
-// Register User
-const register = (userData) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
+exports.connectToDatabase = void 0;
+const mongoose_1 = __importDefault(require("mongoose"));
+const dotenv = __importStar(require("dotenv"));
+const colors_1 = __importDefault(require("colors"));
+dotenv.config();
+const connectToDatabase = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const response = yield axios_1.default.post(API_URL, userData);
-        if (typeof response.data === 'string') {
-            return {
-                message: 'Something went wrong',
-                stack: `${response.data}`,
-            };
-        }
-        else {
-            localStorage.setItem('user', JSON.stringify(response.data));
-            return response.data;
-        }
+        const connectionInstance = yield mongoose_1.default.connect(`${process.env.MONGO_URI}`);
+        console.log(`MongoDB Connected Successfully!!! DB Host: ${connectionInstance.connection.host}`
+            .bgMagenta);
     }
     catch (error) {
-        if ((0, axios_1.isAxiosError)(error) && error.response) {
-            return (_a = error === null || error === void 0 ? void 0 : error.response) === null || _a === void 0 ? void 0 : _a.data;
-        }
-        else {
-            return { message: 'Other error related to 400', stack: `${error}` };
-        }
+        console.log(colors_1.default.bgRed('MONGODB Connection Failed'), error);
+        process.exit(1);
     }
 });
-// Login User
-const login = (userData) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
-    try {
-        const response = yield axios_1.default.post(API_URL + 'login', userData);
-        if (response.data) {
-            localStorage.setItem('user', JSON.stringify(response.data));
-        }
-        return response.data;
-    }
-    catch (error) {
-        if ((0, axios_1.isAxiosError)(error) && error.response) {
-            return (_a = error.response) === null || _a === void 0 ? void 0 : _a.data;
-        }
-        else {
-            return { message: 'Other error related to 400', stack: `${error}` };
-        }
-    }
-});
-// Logout User
-const logout = () => {
-    localStorage.removeItem('user');
-};
-const authService = {
-    register,
-    login,
-    logout,
-};
-exports.default = authService;
+exports.connectToDatabase = connectToDatabase;
