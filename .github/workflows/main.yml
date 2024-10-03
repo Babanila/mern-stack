@@ -15,11 +15,19 @@ jobs:
               with:
                   node-version: '20'
 
-            - name: Install Dependencies
+            - name: Install Frontend Dependencies
+              working-directory: ./frontend
+              run: npm install
+
+            - name: Build Frontend
+              working-directory: ./frontend
+              run: npm run build
+
+            - name: Install Backend Dependencies
               run: |
                   npm install
 
-            - name: Build Project
+            - name: Build Both Projects
               run: |
                   npm run build
 
@@ -32,17 +40,22 @@ jobs:
     # Deploy Job
     deploy:
         needs: build
-
         runs-on: ubuntu-latest
         steps:
-            - name: Download artifact
+            - name: Download Artifact
               uses: actions/download-artifact@v3
               with:
                   name: poduction file
                   path: ./dist
 
+            - name: Deploy Frontend
+              uses: peaceiris/actions-gh-pages@v4
+              with:
+                  github_token: ${{ secrets.PERSONAL_TOKEN }}
+                  publish_dir: ./dist/frontend
+
             - name: Deploy to GitHub Pages
               uses: peaceiris/actions-gh-pages@v4
               with:
                   github_token: ${{ secrets.PERSONAL_TOKEN }}
-                  publish_dir: ./dist
+                  publish_dir: ./dist/backend
